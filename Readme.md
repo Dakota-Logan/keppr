@@ -6,7 +6,7 @@ Keepr is a social network that allows users to visually share, and discover new 
 
 ## Goals
 
-In this checkpoint students will demonstrate a working knowledge of building full-stack applications. They will utilize a VueJs frontend implementing the Vuex design and Vue-Router to manage the dom. On the server side students will use the DotNet WebApi for their server implementing the Repository pattern to communicate with the database. In addition students will use bcrypt for password hashing, dapper as an ORM and MySQL as their database.
+In this checkpoint students will demonstrate a working knowledge of building full-stack applications. They will utilize a VueJs frontend implementing the Vuex design and Vue-Router to manage the dom. On the server side students will use the DotNet WebApi for their server implementing the Repository pattern to communicate with the database. In addition students will use Auth0 for user management, dapper as an ORM and MySQL as their database.
 
 ## The Setup
 
@@ -17,8 +17,6 @@ We want to give the users the opportunity to click on the keep icon for any post
 Vaults themselves are relatively simple... They only require a name and a description and will then have a list of posts that are saved within the vault. Think about how you will handle this relationship.
 
 For example I may really like game art and thus I would be a user who creates a vault named **_Sweet Game Art_** I will then start saving the `keeps` I like into this vault.
-
-The server you are using is a dotnet server with MySqlServer and Dapper. The user auth routes have already been created but you will be in charge of actually creating a user login/register form.
 
 ### Step 1 - Where is the data?
 
