@@ -47,7 +47,8 @@ namespace Keepr
                 {
                     builder
                         .WithOrigins(new string[]{
-                            "http://localhost:8080"
+                            "http://localhost:8080",
+                            "http://localhost:8081"
                         })
                         .AllowAnyMethod()
                         .AllowAnyHeader()
@@ -62,6 +63,7 @@ namespace Keepr
 
             //NOTE REGISTER SERVICES AND REPOSITORIES
             services.AddTransient<KeepsService>();
+            services.AddTransient<KeepsRepository>();
         }
 
         private IDbConnection CreateDbConnection()
