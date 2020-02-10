@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Keepr.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]")]
+	[Route("api/vaults")]
 	public class VaultsController : ControllerBase
 	{
 		private readonly VaultsService _vs;
@@ -24,7 +24,8 @@ namespace Keepr.Controllers
 		{
 			try
 			{
-				return Ok(_vs.Get());
+				var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+				return Ok(_vs.Get(userId));
 			}
 			catch (Exception e)
 			{
@@ -40,7 +41,7 @@ namespace Keepr.Controllers
 			try
 			{
 				var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-				return Ok(_vs.GetById(id, userId).Value);
+				return Ok(_vs.GetById(id, userId));
 			}
 			catch (Exception e)
 			{
@@ -64,63 +65,15 @@ namespace Keepr.Controllers
 			}
 		}
 
-		[HttpPut("{id}")]
-		[Authorize]
-		public ActionResult<string> Edit([FromBody] Vault kep, [FromRoute] int id)
-		{
-			kep.Id = id;
-			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-			kep.UserId = userId;
-			try
-			{
-				_vs.Edit(kep);
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message);
-			}
-
-			return Ok("Was gud edit, thanks fren!");
-		}
-
-		[HttpPut("{id}/views")]
-		public ActionResult<string> IncrementViews([FromRoute] int id)
-		{
-			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-			try
-			{
-				_vs.Increment(id, false, userId);
-				return Ok("Was gud, tanks.");
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message);
-			}
-		}
-
-		[HttpPut("{id}/keeps")]
-		public ActionResult<string> IncrementVaults([FromRoute] int id)
-		{
-			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-			try
-			{
-				_vs.Increment(id, true, userId);
-				return Ok("Was gud, tanks.");
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message);
-			}
-		}
-
 		[HttpDelete("{id}")]
 		[Authorize]
-		public ActionResult Delete([FromRoute] int id)
+		public ActionResult<string> Delete([FromRoute] int id)
 		{
 			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 			try
 			{
-				return Ok(_vs.Delete(id, userId));
+				_vs.Delete(id, userId);
+				return Ok("Successfully deleted!");
 			}
 			catch (Exception e)
 			{

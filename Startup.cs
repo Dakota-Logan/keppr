@@ -64,6 +64,10 @@ namespace Keepr
             //NOTE REGISTER SERVICES AND REPOSITORIES
             services.AddTransient<KeepsService>();
             services.AddTransient<KeepsRepository>();
+            services.AddTransient<VaultsService>();
+            services.AddTransient<VaultsRepository>();
+            services.AddTransient<VaultKeepsService>();
+            services.AddTransient<VaultKeepsRepository>();
         }
 
         private IDbConnection CreateDbConnection()

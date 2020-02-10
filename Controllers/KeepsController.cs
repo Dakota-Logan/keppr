@@ -42,7 +42,7 @@ namespace Keepr.Controllers
 		{
 			try
 			{
-				var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+				string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 				return Ok(_ks.GetById(id, userId).Value);
 			}
 			catch (Exception e)
@@ -57,7 +57,7 @@ namespace Keepr.Controllers
 		{
 			try
 			{
-				var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+				string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 				newKeep.UserId = userId;
 				return Ok(_ks.Create(newKeep));
 			}
@@ -72,7 +72,7 @@ namespace Keepr.Controllers
 		public ActionResult<string> Edit([FromBody] Keep kep, [FromRoute] int id)
 		{
 			kep.Id = id;
-			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 			kep.UserId = userId;
 			try
 			{
@@ -89,7 +89,7 @@ namespace Keepr.Controllers
 		[HttpPut("{id}/views")]
 		public ActionResult<string> IncrementViews([FromRoute] int id)
 		{
-			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 			try
 			{
 				_ks.Increment(id, false, userId);
@@ -104,7 +104,7 @@ namespace Keepr.Controllers
 		[HttpPut("{id}/keeps")]
 		public ActionResult<string> IncrementKeeps([FromRoute] int id)
 		{
-			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 			try
 			{
 				_ks.Increment(id, true, userId);

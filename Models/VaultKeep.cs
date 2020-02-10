@@ -4,7 +4,7 @@
 	{
 		public int Id { get; set; }
 
-		public int AuthorId { get; set; }
+		public string UserId { get; set; }
 
 		public int VaultId { get; set; }
 

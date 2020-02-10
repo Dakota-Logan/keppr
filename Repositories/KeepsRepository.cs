@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using Keepr.Models;
 using Dapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Keepr.Repositories
 {
