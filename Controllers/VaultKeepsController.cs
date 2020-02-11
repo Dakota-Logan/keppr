@@ -5,6 +5,7 @@ using Keepr.Models;
 using Keepr.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Keepr.Controllers
 {
@@ -27,6 +28,7 @@ namespace Keepr.Controllers
 			try
 			{
 				string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+				// string userId = "HeyThere";
 				return Ok(_vks.Get(userId));
 			}
 			catch (Exception e)
