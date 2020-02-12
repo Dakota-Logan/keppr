@@ -1,4 +1,6 @@
-﻿namespace Keepr.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Keepr.Models
 {
 	public class VaultKeeps
 	{
@@ -6,8 +8,10 @@
 
 		public string UserId { get; set; }
 
+		[Required]
 		public int VaultId { get; set; }
 
+		[Required]
 		public int KeepId { get; set; }
 	}
 }

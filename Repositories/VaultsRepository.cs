@@ -35,10 +35,10 @@ namespace Keepr.Repositories
 			return _db.ExecuteScalar<int>(sql, newVault);
 		}
 
-		public void Delete(in int id)
+		public void Delete(in int id, in string userId)
 		{
-			string sql = "DELETE FROM vaults WHERE id = @id";
-			_db.Execute(sql, new {id});
+			string sql = "DELETE FROM vaults WHERE id = @id AND userId = @userId";
+			_db.Execute(sql, new {id, userId});
 		}
 	}
 }

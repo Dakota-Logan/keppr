@@ -24,7 +24,10 @@ namespace Keepr.Controllers
 		{
 			try
 			{
-				var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+				var ctx = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+				if(ctx == null)
+					return BadRequest("You need to be logged in to do that!");
+				var userId = ctx.Value;
 				return Ok(_vs.Get(userId));
 			}
 			catch (Exception e)
@@ -40,7 +43,10 @@ namespace Keepr.Controllers
 		{
 			try
 			{
-				var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+				var ctx = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+				if(ctx == null)
+					return BadRequest("You need to be logged in to do that!");
+				var userId = ctx.Value;
 				return Ok(_vs.GetById(id, userId));
 			}
 			catch (Exception e)
@@ -69,7 +75,10 @@ namespace Keepr.Controllers
 		[Authorize]
 		public ActionResult<string> Delete([FromRoute] int id)
 		{
-			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			var ctx = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+			if(ctx == null)
+				return BadRequest("You need to be logged in to do that!");
+			var userId = ctx.Value;
 			try
 			{
 				_vs.Delete(id, userId);

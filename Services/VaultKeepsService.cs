@@ -14,9 +14,9 @@ namespace Keepr.Services
 		{
 			_vkr = vkr;
 		}
-		public IEnumerable<VaultKeeps> Get(string userId)
+		public IEnumerable<VaultKeeps> Get(string userId, int vaultId)
 		{
-			return _vkr.Get(userId);
+			return _vkr.Get(userId, vaultId);
 		}
 
 		public VaultKeeps GetById(in int id, string userId)
@@ -27,15 +27,24 @@ namespace Keepr.Services
 			return valk;
 		}
 
-		public VaultKeeps Create(in VaultKeeps vk)
+		public string Create(in VaultKeeps vk)
 		{
-				int id =_vkr.Create(vk);
-				return _vkr.GetById(id);
+			VaultKeeps vk1 = _vkr.CheckExists(vk);
+			if (vk1 != null)
+				return "VaultKeep";
+
+			_vkr.Create(vk);
+			return "VaultKeep";
 		}
 
-		public void Delete(in int id, string userId)
+		public IEnumerable<Keep> GetKeeps(int id,string userId)
 		{
-			_vkr.Delete(id, userId);
+			return _vkr.GetKeeps(id, userId);
+		}
+
+		public void Delete(in int vaultId, in int keepId, string userId)
+		{
+			_vkr.Delete(vaultId, keepId, userId);
 		}
 	}
 }

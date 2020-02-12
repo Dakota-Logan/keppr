@@ -31,7 +31,7 @@ namespace Keepr.Services
 			return _repo.GetById(newId);
 		}
 
-		public ActionResult<Keep> GetById(in int id, in string userId)
+		public Keep GetById(in int id, in string userId)
 		{
 			Keep kep2 = _repo.GetById(id);
 			if (kep2 == null)
@@ -58,6 +58,14 @@ namespace Keepr.Services
 			if (testKep.UserId != userId)
 				throw new UnauthorizedAccessException("Cannot edit a keep you do not own.");
 			_repo.Increment(id, b);
+		}
+
+		public void IncrementShare(in int id, string userId)
+		{
+			Keep testKep = _repo.GetById(id);
+			if (testKep.UserId != userId)
+				throw new UnauthorizedAccessException("Cannot edit a keep you do not own.");
+			_repo.IncrementShare(id);
 		}
 	}
 }

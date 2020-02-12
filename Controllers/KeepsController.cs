@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Keepr.Models;
@@ -12,7 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace Keepr.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]")]
+	[Route("api/keeps")]
 	public class KeepsController : ControllerBase
 	{
 		private readonly KeepsService _ks;
@@ -42,8 +44,13 @@ namespace Keepr.Controllers
 		{
 			try
 			{
-				string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-				return Ok(_ks.GetById(id, userId).Value);
+				string userId;
+				var ctx = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+				if (ctx == null)
+					userId = "null";
+				else
+					userId = ctx.Value;
+				return Ok(_ks.GetById(id, userId));
 			}
 			catch (Exception e)
 			{
@@ -57,7 +64,10 @@ namespace Keepr.Controllers
 		{
 			try
 			{
-				string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+				var ctx = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+				if(ctx==null)
+					throw new Exception("You need to be logged in to do that!");
+				string userId = ctx.Value;
 				newKeep.UserId = userId;
 				return Ok(_ks.Create(newKeep));
 			}
@@ -108,6 +118,21 @@ namespace Keepr.Controllers
 			try
 			{
 				_ks.Increment(id, true, userId);
+				return Ok("Was gud, tanks.");
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+
+		[HttpPut("{id}/shares")]
+		public ActionResult<string> IncrementShares([FromRoute] int id)
+		{
+			string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			try
+			{
+				_ks.IncrementShare(id, userId);
 				return Ok("Was gud, tanks.");
 			}
 			catch (Exception e)

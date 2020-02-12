@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Keepr.Models;
 using Dapper;
 
@@ -16,10 +20,9 @@ namespace Keepr.Repositories
 			_db = db;
 		}
 
-		public IEnumerable<VaultKeeps> Get(string userId)
+		public IEnumerable<VaultKeeps> Get(string userId, int vaultId)
 		{
-			string sql = "SELECT * FROM vaultkeeps WHERE userId = @userId";
-			return _db.Query<VaultKeeps>(sql, new {userId});
+			throw new NotImplementedException();
 		}
 
 		public VaultKeeps GetById(in int id)
@@ -28,18 +31,31 @@ namespace Keepr.Repositories
 			return _db.QueryFirstOrDefault<VaultKeeps>(sql, new {id});
 		}
 
-		public int Create(VaultKeeps vk)
+		public IEnumerable<Keep> GetKeeps(int id, string userId)
 		{
-			string sql = @"INSERT INTO vaultkeeps (vaultId, keepId, userId)
-					VALUES (@VaultId, @KeepId, @UserId);
-					SELECT LAST_INSERT_ID()";
-			return _db.ExecuteScalar<int>(sql, vk);
+			string sql = @"SELECT k.* FROM vaultkeeps vk
+			INNER JOIN keeps k ON k.id = vk.keepId
+			WHERE (vaultId = @vaultId AND vk.userId = @userId)";
+
+			return _db.Query<Keep>(sql, new {vaultId=id, userId});
 		}
 
-		public void Delete(in int id, string userId)
+		public void Create(VaultKeeps vk)
 		{
-			string sql = @"DELETE FROM vaultkeeps WHERE id = @id AND userId = @userId";
-			_db.Execute(sql, new {id, userId});
+			string sql = "INSERT INTO vaultkeeps (vaultId, keepId, userId) VALUES (@VaultId, @KeepId, @UserId);";
+			_db.Execute(sql, vk);
+		}
+
+		public void Delete(in int vaultId, in int keepId, in string userId)
+		{
+			string sql = "DELETE FROM vaultkeeps WHERE vaultId = @vaultId AND keepId = @keepId AND userId = @userId";
+			_db.Execute(sql, new {vaultId, keepId, userId});
+		}
+
+		public VaultKeeps CheckExists(in VaultKeeps vk)
+		{
+			string sql = "SELECT * FROM vaultkeeps WHERE vaultId = @VaultId AND keepId = @KeepId AND userId = @UserId";
+			return _db.QueryFirstOrDefault<VaultKeeps>(sql, vk);
 		}
 	}
 }

@@ -37,11 +37,7 @@ namespace Keepr.Services
 
 		public void Delete(in int id, string userId)
 		{
-			Vault vlat = _repo.GetById(id);
-			if (vlat == null || vlat.UserId != userId)
-				throw new Exception("Bad You! - Invalid Id or Authorization.");
-			else
-				_repo.Delete(id);
+			_repo.Delete(id, userId);
 		}
 	}
 }

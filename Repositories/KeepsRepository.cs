@@ -70,6 +70,12 @@ namespace Keepr.Repositories
 			}
 		}
 
+		public void IncrementShare(in int id)
+		{
+			string sql = "UPDATE keeps SET shares = shares+1 WHERE id = @id";
+			_db.QueryFirstOrDefault<Keep>(sql, new {id});
+		}
+
 		internal string Delete(in int id, in string userId)
 		{
 			Keep kep2 =_db.QueryFirstOrDefault<Keep>("SELECT * FROM keeps WHERE id = @id", new {id});
